@@ -1,0 +1,9 @@
+[submodule "library-checker-judge"]
+	path = library-checker-judge
+	url = https://github.com/goropikari/library-checker-judge
+[submodule "library-checker-frontend"]
+	path = library-checker-frontend
+	url = https://github.com/goropikari/library-checker-frontend.git
+[submodule "library-checker-problems"]
+	path = library-checker-problems
+	url = https://github.com/goropikari/library-checker-problems.git

@@ -1,0 +1,32 @@
+{
+    "name": "Ubuntu",
+    // https://mcr.microsoft.com/en-us/artifact/mar/devcontainers/base/tags
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/go:1": {
+            "version": "1.23"
+        },
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "3.12"
+        },
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "22"
+        }
+    },
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+    "postCreateCommand": ".devcontainer/post-create.sh",
+    "remoteEnv": {
+        "PROTO_PATH": "${containerWorkspaceFolder}/library-checker-judge/api/proto",
+        "PROBLEMS_PATH": "${containerWorkspaceFolder}/library-checker-problems"
+    },
+    "appPort": [
+        5173, // frontend
+        12380, // API
+        9000, // minio
+        9001, // minio UI
+        9099 // firebase
+    ],
+    "remoteUser": "vscode"
+}
