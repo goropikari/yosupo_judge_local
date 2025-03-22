@@ -11,3 +11,4 @@ docker build -t library-checker-images-pypy -f $SCRIPT_DIR/Dockerfile.PYPY $SCRI
 docker build -t library-checker-images-golang -f $SCRIPT_DIR/Dockerfile.GOLANG $SCRIPT_DIR
 docker build -t library-checker-images-ruby -f $SCRIPT_DIR/Dockerfile.RUBY $SCRIPT_DIR
 docker build -t library-checker-images-julia -f $SCRIPT_DIR/Dockerfile.JULIA $SCRIPT_DIR
+docker build -t library-checker-images-scheme -f $SCRIPT_DIR/Dockerfile.SCHEME $SCRIPT_DIR

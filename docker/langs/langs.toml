@@ -54,3 +54,11 @@
     image_name = "library-checker-images-julia"
     compile = ["julia", "-e", "Meta.parse(\"begin \" * read(\"Main.jl\",String) * \" end\")"]
     exec = ["julia", "Main.jl"]
+[[langs]]
+    id = "scheme"
+    name = "Scheme (Gauche)"
+    version = "gauche 0.9.15"
+    source = "Main.scm"
+    image_name = "library-checker-images-scheme"
+    compile = ["touch", "ok"]
+    exec = ["gosh", "Main.scm"]
