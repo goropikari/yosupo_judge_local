@@ -1,9 +1,9 @@
-FROM rust:alpine as init-builder
+FROM public.ecr.aws/docker/library/rust:1.85.1-alpine3.21 AS init-builder
 WORKDIR /library-checker-init
 COPY init /library-checker-init
 RUN cargo build --release --target=x86_64-unknown-linux-musl
 
-FROM python:3.10-slim
+FROM public.ecr.aws/docker/library/python:3.12-slim
 
 RUN pip install --upgrade numpy scipy
 

@@ -1,9 +1,9 @@
-FROM rust:alpine as init-builder
+FROM public.ecr.aws/docker/library/rust:1.85.1-alpine3.21 AS init-builder
 WORKDIR /library-checker-init
 COPY init /library-checker-init
 RUN cargo build --release --target=x86_64-unknown-linux-musl
 
-FROM ruby:2.7.1-alpine
+FROM public.ecr.aws/docker/library/ruby:3.4.2-alpine3.21
 
 COPY --from=init-builder /library-checker-init/target/x86_64-unknown-linux-musl/release/library-checker-init /usr/bin
 
