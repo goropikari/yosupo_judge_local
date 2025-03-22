@@ -1,0 +1,25 @@
+FROM public.ecr.aws/docker/library/golang:1.24-bookworm
+
+RUN apt-get update && \
+    apt-get install -y \
+        wget \
+        ca-certificates \
+        curl \
+        gnupg \
+        lsb-release
+
+RUN GRPC_HEALTH_PROBE_VERSION=v0.4.37 && \
+    wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
+    chmod +x /bin/grpc_health_probe
+
+WORKDIR /library-checker-judge
+
+COPY ./library-checker-judge /library-checker-judge
+RUN cd api && CGO_ENABLED=0 GOOS=linux go build .
+RUN cd uploader && CGO_ENABLED=0 GOOS=linux go build .
+
+COPY ./docker/deploy_problems.sh .
+COPY ./docker/deploy_aplusb.sh .
+
+ENV FIREBASE_PROJECT=dev-library-checker-project
+ENTRYPOINT ["/library-checker-judge/api/api"]

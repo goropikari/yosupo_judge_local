@@ -1,9 +1,11 @@
-```bash
-devcontainer up --workspace-folder=.
-devcontainer exec --workspace-folder=. bash -c 'nohup ./start.sh 2>&1 /dev/null' &
-devcontainer exec --workspace-folder=. ./deploy_problems.sh
-open http://localhost:5173
+# yosupo_judge_local
 
-# generate system test case
-devcontainer exec --workspace-folder=. python library-checker-problems/generate.py -p range_affine_range_sum
+```sh
+git clone --recursive --depth 1 -b v0.2.0 https://github.com/goropikari/yosupo_judge_local.git
+cd yosupo_judge_local
+./start.sh
+
+# 問題をデプロイする
+docker compose exec api ./deploy_aplusb.sh
+docker compose exec api ./deploy_problems.sh
 ```

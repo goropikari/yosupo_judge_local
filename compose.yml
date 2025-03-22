@@ -1,0 +1,132 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.API
+    ports:
+      - 12380:12380
+    volumes:
+      - ./library-checker-problems:/opt/library-checker-problems
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+      create-minio-bucket:
+        condition: service_completed_successfully
+    environment:
+      - API_DB_LOG=true
+      - PGHOST=db
+      - FIREBASE_AUTH_EMULATOR_HOST=firebase:9099
+      - PROBLEMS_PATH=/opt/library-checker-problems
+      - MINIO_HOST=minio:9000
+    healthcheck:
+        test: wget -q -O - localhost:12380/health || exit 1
+        timeout: 10s
+        interval: 1s
+        retries: 30
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.FRONTEND
+    ports:
+      - 5173:5173
+    environment:
+      - VITE_API_URL=http://localhost:12380
+      - VITE_PUBLIC_BUCKET_URL=http://localhost:9000/testcase-public/v3/
+      - VITE_FIREBASE_API_KEY=AIzaSyDYcSXsFQLNJanlr9qS0k4e6gRNMAksKUU
+      - VITE_FIREBASE_AUTH_DOMAIN=dev-library-checker-project.firebaseapp.com
+      - VITE_FIREBASE_AUTH_EMULATOR_URL=http://firebase:9099
+    # command: sleep infinity
+    healthcheck:
+        test: wget -q -O - localhost:12381/health || exit 1
+        timeout: 10s
+        interval: 1s
+        retries: 30
+
+  judger:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.JUDGER
+    volumes:
+      - ./library-checker-problems:/opt/library-checker-problems
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+      create-minio-bucket:
+        condition: service_completed_successfully
+    environment:
+      - API_DB_LOG=true
+      - PGHOST=db
+      - PROBLEMS_PATH=/opt/library-checker-problems
+      - FIREBASE_AUTH_EMULATOR_HOST=firebase:9099
+      - MINIO_HOST=minio:9000
+
+  db:
+    image: postgres:17.2
+    volumes:
+      - ./data/db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=librarychecker
+      - POSTGRES_PASSWORD=lcdummypassword
+    healthcheck:
+        test: [ "CMD", "pg_isready", "-q", "-d", "librarychecker", "-U", "postgres" ]
+        timeout: 10s
+        interval: 1s
+        retries: 30
+  db-init:
+    build:
+      context: ./library-checker-judge
+      dockerfile: Dockerfile.MIGRATOR
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - PGHOST=db
+
+  minio:
+    image: minio/minio
+    command: server /data --console-address :9001
+    volumes:
+      - ./data/minio_data:/data
+    ports:
+      - 9000:9000
+      # - 9001:9001
+    environment:
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=miniopass
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  create-minio-bucket:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add myminio http://minio:9000 minio miniopass;
+      /usr/bin/mc mb myminio/testcase;
+      /usr/bin/mc mb myminio/testcase-public;
+      /usr/bin/mc policy download myminio/testcase;
+      /usr/bin/mc policy download myminio/testcase-public;
+      /usr/bin/mc anonymous set public myminio/testcase-public;
+      exit 0;
+      "
+
+  firebase:
+    build:
+      context: ./library-checker-judge
+      dockerfile: firebase/Dockerfile
+    # ports:
+    #   - 4000:4000
+    #   - 8085:8085
+    #   - 9099:9099
+    volumes:
+      - ./library-checker-judge/firebase/firebase.json:/opt/firebase/firebase.json
+    working_dir: /opt/firebase
+    command: firebase emulators:start --project dev-library-checker-project
+    tty: true
+

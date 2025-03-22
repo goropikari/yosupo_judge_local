@@ -1,0 +1,15 @@
+FROM public.ecr.aws/docker/library/node:22
+
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y \
+        protobuf-compiler
+
+ENV PROTO_PATH=/app/api/proto
+WORKDIR /app
+
+COPY ./library-checker-frontend /app
+COPY ./library-checker-judge/api/proto/library_checker.proto ${PROTO_PATH}/library_checker.proto
+
+RUN npm install && npm run protoc
+
+CMD ["npm", "run", "dev"]

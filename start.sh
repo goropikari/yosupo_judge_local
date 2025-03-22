@@ -1,17 +1,13 @@
 #!/bin/bash
 
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
+# Initialize ファイルが存在しなかったら runtime 用の image を build する
+if [ ! -e .initialized  ]; then
+    pushd library-checker-judge
+    ./langs/build.sh
+    ./gen_protoc.sh
+    popd
+fi
 
-pushd library-checker-judge
-docker compose up -d --build --wait
-popd
-
-pushd library-checker-frontend
-npm run dev &
-popd
-
-${SCRIPT_DIR}/deploy_aplusb.sh
-
-pushd library-checker-judge/judge
-go run .
-popd
+touch .initialized
+docker compose up -d --build
+open http://localhost:5173
