@@ -7,6 +7,14 @@
     compile = ["g++", "-O2", "-std=c++23", "-DEVAL", "-march=native", "-o", "main", "main.cpp", "-I", "/opt/ac-library"]
     exec = ["./main"]
 [[langs]]
+    id = "clang"
+    name = "C++23(clang)"
+    version = "CLANG 18 + AC Library(1.5.1)"
+    source = "main.cpp"    
+    image_name = "library-checker-images-clang"
+    compile = ["clang++", "-O2", "-std=c++23", "-DEVAL", "-march=native", "-o", "main", "main.cpp", "-I", "/opt/ac-library"]
+    exec = ["./main"]
+[[langs]]
     id = "python3"
     name = "Python3"
     version = "python3.12 + numpy + scipy"
