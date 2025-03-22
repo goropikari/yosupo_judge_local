@@ -15,6 +15,9 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.37 && \
 WORKDIR /library-checker-judge
 
 COPY ./library-checker-judge /library-checker-judge
+RUN cd api && go mod download
+RUN cd uploader && go mod download
+
 RUN rm -rf langs
 COPY ./docker/langs /library-checker-judge/langs
 RUN cd api && CGO_ENABLED=0 GOOS=linux go build .
