@@ -2,15 +2,11 @@ FROM public.ecr.aws/docker/library/golang:1.24-bookworm
 
 RUN apt-get update && \
     apt-get install -y \
-        wget \
-        ca-certificates \
-        curl \
-        gnupg \
-        lsb-release
+        wget
 
-RUN GRPC_HEALTH_PROBE_VERSION=v0.4.37 && \
-    wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
-    chmod +x /bin/grpc_health_probe
+# RUN GRPC_HEALTH_PROBE_VERSION=v0.4.37 && \
+#     wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
+#     chmod +x /bin/grpc_health_probe
 
 WORKDIR /library-checker-judge
 

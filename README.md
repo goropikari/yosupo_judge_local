@@ -21,3 +21,10 @@ make update-lang
 docker compose down
 docker compose up -d
 ```
+
+## system test case を作成
+
+```sh
+docker compose exec api python3 /opt/library-checker-problems/generate.py -p <problem_name>
+docker compose exec api python3 /opt/library-checker-problems/generate.py -p aplusb
+```

@@ -45,7 +45,7 @@
     source = "main.rb"
     image_name = "library-checker-images-ruby"
     compile = ["ruby", "-w", "-c", "main.rb"]
-    exec = ["ruby", "main.rb"]
+    exec = ["ruby", "--jit", "--yjit", "main.rb"]
 [[langs]]
     id = "julia"
     name = "Julia"
