@@ -50,6 +50,8 @@ services:
     volumes:
       - ./library-checker-problems:/opt/library-checker-problems
       - /var/run/docker.sock:/var/run/docker.sock
+      # /tmp にテストケースをダウンロードしてきて runtime container に bind mount するので /tmp を mount させる必要がある
+      - /tmp:/tmp 
     depends_on:
       db-init:
         condition: service_completed_successfully
