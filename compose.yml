@@ -19,10 +19,10 @@ services:
       - PROBLEMS_PATH=/opt/library-checker-problems
       - MINIO_HOST=minio:9000
     healthcheck:
-        test: wget -q -O - localhost:12380/health || exit 1
-        timeout: 10s
-        interval: 1s
-        retries: 30
+      test: wget -q -O - localhost:12380/health || exit 1
+      timeout: 10s
+      interval: 1s
+      retries: 30
 
   frontend:
     build:
@@ -38,10 +38,10 @@ services:
       - VITE_FIREBASE_AUTH_EMULATOR_URL=http://firebase:9099
     # command: sleep infinity
     healthcheck:
-        test: wget -q -O - localhost:12381/health || exit 1
-        timeout: 10s
-        interval: 1s
-        retries: 30
+      test: wget -q -O - localhost:12381/health || exit 1
+      timeout: 10s
+      interval: 1s
+      retries: 30
 
   judger:
     build:
@@ -51,7 +51,7 @@ services:
       - ./library-checker-problems:/opt/library-checker-problems
       - /var/run/docker.sock:/var/run/docker.sock
       # /tmp にテストケースをダウンロードしてきて runtime container に bind mount するので /tmp を mount させる必要がある
-      - /tmp:/tmp 
+      - /tmp:/tmp
     depends_on:
       db-init:
         condition: service_completed_successfully
@@ -72,10 +72,18 @@ services:
       - POSTGRES_DB=librarychecker
       - POSTGRES_PASSWORD=lcdummypassword
     healthcheck:
-        test: [ "CMD", "pg_isready", "-q", "-d", "librarychecker", "-U", "postgres" ]
-        timeout: 10s
-        interval: 1s
-        retries: 30
+      test: [
+        "CMD",
+        "pg_isready",
+        "-q",
+        "-d",
+        "librarychecker",
+        "-U",
+        "postgres",
+      ]
+      timeout: 10s
+      interval: 1s
+      retries: 30
   db-init:
     build:
       context: ./library-checker-judge
@@ -131,4 +139,3 @@ services:
     working_dir: /opt/firebase
     command: firebase emulators:start --project dev-library-checker-project
     tty: true
-

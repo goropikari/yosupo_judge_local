@@ -1,13 +1,16 @@
 # yosupo_judge_local
 
 ```sh
-git clone --recursive --depth 1 -b v0.2.0 https://github.com/goropikari/yosupo_judge_local.git
+git clone --recursive --depth 1 https://github.com/goropikari/yosupo_judge_local.git
 cd yosupo_judge_local
+cd library-checker-judge
+./gen_protoc.sh
+cd ..
 ./start.sh
 
 ## 問題をデプロイする
 docker compose exec api ./deploy_aplusb.sh
-docker compose exec api ./deploy_problems.sh
+docker compose exec api ./deploy_problems.sh  # 全ての問題をデプロイする
 ```
 
 ## 言語を追加する
