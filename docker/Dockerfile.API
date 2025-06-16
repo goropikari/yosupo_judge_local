@@ -4,18 +4,13 @@ RUN apt-get update && \
     apt-get install -y \
         wget
 
-# RUN GRPC_HEALTH_PROBE_VERSION=v0.4.37 && \
-#     wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
-#     chmod +x /bin/grpc_health_probe
-
 WORKDIR /library-checker-judge
 
 COPY ./library-checker-judge /library-checker-judge
 RUN cd api && go mod download
 RUN cd uploader && go mod download
 
-RUN rm -rf langs
-COPY ./docker/langs /library-checker-judge/langs
+COPY ./docker/langs/langs.toml /library-checker-judge/langs/langs.toml
 RUN cd api && CGO_ENABLED=0 GOOS=linux go build .
 RUN cd uploader && CGO_ENABLED=0 GOOS=linux go build .
 

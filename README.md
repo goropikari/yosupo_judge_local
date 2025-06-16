@@ -4,7 +4,7 @@
 git clone --recursive --depth 1 https://github.com/goropikari/yosupo_judge_local.git
 cd yosupo_judge_local
 cd library-checker-judge
-./gen_protoc.sh
+./run_protoc.sh
 cd ..
 ./start.sh
 

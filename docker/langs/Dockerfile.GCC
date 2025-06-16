@@ -14,7 +14,8 @@ COPY --from=builder /workdir/ac-library/atcoder /opt/ac-library/atcoder
 COPY init /usr/bin
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y libboost-math-dev
+    apt-get install -y libboost-math-dev && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY --from=init-builder /library-checker-init/target/x86_64-unknown-linux-musl/release/library-checker-init /usr/bin
 

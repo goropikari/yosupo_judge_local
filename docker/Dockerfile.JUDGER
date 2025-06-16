@@ -22,8 +22,8 @@ WORKDIR /library-checker-judge
 COPY ./library-checker-judge /library-checker-judge
 RUN cd judge && go mod download
 
-RUN rm -rf langs
-COPY ./docker/langs /library-checker-judge/langs
+# RUN rm -rf langs
+COPY ./docker/langs/langs.toml /library-checker-judge/langs/langs.toml
 RUN cd judge && CGO_ENABLED=0 GOOS=linux go build .
 
 ENV FIREBASE_PROJECT=dev-library-checker-project

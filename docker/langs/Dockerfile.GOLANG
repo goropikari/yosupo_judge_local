@@ -3,7 +3,7 @@ WORKDIR /library-checker-init
 COPY init /library-checker-init
 RUN cargo build --release --target=x86_64-unknown-linux-musl
 
-FROM public.ecr.aws/docker/library/golang:1.24.1-alpine3.21
+FROM public.ecr.aws/docker/library/golang:1.24-alpine3.22
 
 COPY --from=init-builder /library-checker-init/target/x86_64-unknown-linux-musl/release/library-checker-init /usr/bin
 

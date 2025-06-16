@@ -7,7 +7,7 @@ if [ ! -e .initialized  ]; then
     popd
 
     pushd library-checker-judge
-    ./gen_protoc.sh
+    ./run_protoc.sh
     popd
 fi
 
