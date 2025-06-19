@@ -7,7 +7,7 @@ FROM public.ecr.aws/ubuntu/ubuntu:24.04 AS builder
 RUN apt-get update
 RUN apt-get install -y git
 WORKDIR /workdir
-RUN git clone https://github.com/atcoder/ac-library/ -b v1.5.1
+RUN git clone --depth 1 -b v1.5.1 https://github.com/atcoder/ac-library
 
 FROM public.ecr.aws/docker/library/ubuntu:24.04
 COPY --from=builder /workdir/ac-library/atcoder /opt/ac-library/atcoder
