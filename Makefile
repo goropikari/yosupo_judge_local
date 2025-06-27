@@ -10,3 +10,8 @@ start:
 .PHONY: down
 down:
 	docker compose down
+
+.PHONY: docker
+docker:
+	bash -c 'cd library-checker-judge && ./run_protoc.sh'
+	docker compose build --no-cache
