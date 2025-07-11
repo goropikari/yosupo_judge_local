@@ -2,7 +2,7 @@ FROM public.ecr.aws/docker/library/golang:1.24-bookworm
 
 RUN apt-get update && \
     apt-get install -y \
-        wget
+        wget python3-colorlog
 
 WORKDIR /library-checker-judge
 
