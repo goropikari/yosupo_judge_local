@@ -8,6 +8,9 @@ cd library-checker-judge
 cd ..
 ./start.sh
 
+# http://localhost:5173/
+
+
 ## 問題をデプロイする
 docker compose exec api ./deploy_aplusb.sh
 docker compose exec api ./deploy_problems.sh  # 全ての問題をデプロイする
