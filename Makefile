@@ -7,6 +7,10 @@ update-lang:
 start:
 	./start.sh
 
+.PHONY: deploy-problems
+deploy-problems:
+	docker compose exec api ./deploy_problems.sh
+
 .PHONY: down
 down:
 	docker compose down
